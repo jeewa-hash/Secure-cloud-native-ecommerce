@@ -1,0 +1,43 @@
+{
+  "family": "orderservice-task",
+  "networkMode": "awsvpc",
+  "containerDefinitions": [
+    {
+      "name": "orderservice",
+      "image": "PLACEHOLDER_IMAGE",
+      "cpu": 256,
+      "memory": 512,
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 4000,
+          "hostPort": 4000,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {
+          "name": "MONGO_URI",
+          "value": "your-mongodb-uri"
+        },
+        {
+          "name": "PORT",
+          "value": "4000"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/orderservice",
+          "awslogs-region": "eu-north-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ],
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "executionRoleArn": "arn:aws:iam::586988810414:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::586988810414:role/ecsTaskExecutionRole"
+}
