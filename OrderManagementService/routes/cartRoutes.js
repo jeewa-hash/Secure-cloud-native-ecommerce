@@ -4,10 +4,10 @@ import { addToCart, getCart, updateCartQuantity, removeFromCart, clearCart } fro
 
 const router = express.Router();
 
-router.get("/", authUser, getCart);              
-router.post("/add", authUser, addToCart);       
-router.put("/update", authUser, updateCartQuantity); 
-router.delete("/remove", authUser, removeFromCart);  
+router.get("/", authUser, getCart);
+router.post("/add", authUser, addToCart);
+router.put("/update", authUser, updateCartQuantity);
+router.delete("/remove", authUser, removeFromCart);
 router.delete("/clear", authUser, clearCart);
 
 export default router;

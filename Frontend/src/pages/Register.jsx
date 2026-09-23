@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Mail, Lock, User as UserIcon, Phone, ShoppingBag } from 'lucide-react';
 import axios from 'axios';
+import { AUTH_API } from '../apiConfig';
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -33,7 +34,7 @@ const Register = () => {
         setIsLoading(true);
         try {
             const { confirmPassword, ...payload } = formData;
-            const response = await axios.post('http://localhost:5002/api/auth/register', payload);
+            const response = await axios.post(`${AUTH_API}/register`, payload);
 
             if (response.status === 201) {
                 // Pass a success message to the login page
@@ -126,6 +127,7 @@ const Register = () => {
                                     className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-600 focus:border-transparent outline-none transition-all text-sm appearance-none cursor-pointer">
                                     <option value="customer">Customer</option>
                                     <option value="shop">Shop Owner</option>
+                                    <option value="delivery">Delivery Personnel</option>
                                 </select>
                             </div>
                         </div>

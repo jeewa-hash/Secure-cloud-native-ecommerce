@@ -1,11 +1,11 @@
 {
-  "name": "restaurant_management_service",
+  "name": "shop_management_service",
   "version": "1.0.0",
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon src/index.js",
-    "dev": "node src/index.js"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
   },
   "keywords": [],
   "author": "",

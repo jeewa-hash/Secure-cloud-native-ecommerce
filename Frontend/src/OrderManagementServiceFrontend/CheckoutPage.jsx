@@ -22,6 +22,7 @@ const CheckoutPage = () => {
   const navigate = useNavigate();
   const [cart, setCart] = useState({ items: [] });
   const [address, setAddress] = useState("");
+  const [zipCode, setZipCode] = useState("");
   const [phone, setPhone] = useState("");
   const [deliveryType, setDeliveryType] = useState("standard");
   const [instructions, setInstructions] = useState("");
@@ -118,6 +119,12 @@ const CheckoutPage = () => {
       newErrors.address = "Delivery address is required";
     }
 
+    if (!zipCode.trim()) {
+      newErrors.zipCode = "Zip code is required";
+    } else if (!/^\d{5}$/.test(zipCode.trim())) {
+      newErrors.zipCode = "Please enter a valid 5-digit zip code";
+    }
+
     if (!phone) {
       newErrors.phone = "Phone number is required";
     } else if (phone.length !== 10) {
@@ -143,6 +150,7 @@ const CheckoutPage = () => {
         "http://localhost:4000/api/order/checkout",
         {
           address: address.trim(),
+          zipCode: zipCode.trim(),
           phone: phone,
           deliveryType,
           instructions: instructions.trim() || "",
@@ -347,6 +355,43 @@ const CheckoutPage = () => {
                 />
               </div>
               {errors.address && <p className="text-red-500 text-sm mt-1 ml-1">{errors.address}</p>}
+            </div>
+
+            <div className="flex flex-col">
+              <div className="relative">
+                <MapPin
+                  className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${
+                    errors.zipCode ? 'text-red-500' : 'text-gray-400'
+                  }`}
+                  size={20}
+                />
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="Enter your zip code"
+                  value={zipCode}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, '').slice(0, 5);
+                    setZipCode(value);
+                    if (errors.zipCode) setErrors({ ...errors, zipCode: null });
+                  }}
+                  className={`w-full pl-10 pr-10 py-3 border-2 rounded-xl focus:ring-2 transition-all outline-none
+                    ${
+                      errors.zipCode
+                        ? 'border-red-500 focus:ring-red-100'
+                        : 'border-gray-200 focus:border-orange-500 focus:ring-orange-100'
+                    }`}
+                />
+                {zipCode.length === 5 && (
+                  <CheckCircle
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-green-500"
+                    size={20}
+                  />
+                )}
+              </div>
+              {errors.zipCode && (
+                <p className="text-red-500 text-sm mt-1 ml-1">{errors.zipCode}</p>
+              )}
             </div>
 
             <div className="flex flex-col">

@@ -4,7 +4,7 @@
   "containerDefinitions": [
     {
       "name": "orderservice",
-      "image": "PLACEHOLDER_IMAGE",
+      "image": "katoshera/orderservice:1.0",
       "cpu": 256,
       "memory": 512,
       "essential": true,
@@ -17,14 +17,29 @@
       ],
       "environment": [
         {
-          "name": "MONGO_URI",
-          "value": "your-mongodb-uri"
-        },
-        {
           "name": "PORT",
           "value": "4000"
+        },
+        {
+          "name": "SHOP_SERVICE_URL",
+          "value": "http://gateway-alb-943122502.eu-north-1.elb.amazonaws.com/api/products"
+        },
+        {
+          "name": "AUTH_SERVICE_URL",
+          "value": "http://auth-service-alb-123456789.eu-north-1.elb.amazonaws.com/api/auth"
         }
       ],
+      "secrets": [
+        {
+          "name": "MONGO_URI",
+          "valueFrom": "arn:aws:ssm:eu-north-1:586988810414:parameter/orderservice/MONGO_URI"
+        },
+        {
+          "name": "JWT_SECRET",
+          "valueFrom": "arn:aws:ssm:eu-north-1:586988810414:parameter/orderservice/JWT_SECRET"
+        }
+      ],
+
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {

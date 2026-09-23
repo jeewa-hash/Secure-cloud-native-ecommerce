@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { User, Mail, Phone, Save, Loader2 } from 'lucide-react';
-
+import config from "../config";
+const USER_API = config.USER_API; 
 const CustomerProfile = () => {
     const [profile, setProfile] = useState({
         username: '',
@@ -40,7 +41,7 @@ const CustomerProfile = () => {
                 return;
             }
 
-            const res = await axios.get(`http://localhost:5002/api/users/${userId}`);
+            const res = await axios.get(`${USER_API}/${userId}`);
             const user = res.data;
 
             setProfile({
@@ -79,7 +80,7 @@ const CustomerProfile = () => {
 
             const userId = getUserIdFromToken();
 
-            await axios.put(`http://localhost:5002/api/users/${userId}`, {
+            await axios.put(`${USER_API}/${userId}`, {
                 userName: profile.username,
                 firstName: profile.firstName,
                 lastName: profile.lastName,

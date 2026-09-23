@@ -22,6 +22,9 @@ import {
   Image as ImageIcon
 } from "lucide-react";
 
+import config from "../config";
+const ORDER_SERVICE_URL = config.ORDER_API;
+
 const OrderHistoryPage = () => {
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
@@ -41,7 +44,7 @@ const OrderHistoryPage = () => {
         return;
       }
 
-      const res = await axios.get("http://localhost:4000/api/order/history", {
+      const res = await axios.get(`${ORDER_SERVICE_URL}/history`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

@@ -4,6 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import logger from './utils/logger.js';
 
 // Load environment variables
 dotenv.config();
@@ -18,33 +19,24 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 
-app.get("/health", (req, res) => {
-    res.status(200).json({
-      success: true,
-      message: "Service is running",
-      uptime: process.uptime(),
-      timestamp: new Date().toISOString()
-    });
-  });
-
 // Database Connection & Server Start
-const PORT = process.env.PORT || 5002;
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/userdb';
+const PORT = process.env.PORT || 5002; 
+const MONGO_URI = process.env.MONGO_URI;
 
 mongoose.connect(MONGO_URI)
     .then(async () => {
-        console.log('Connected to MongoDB successfully.');
+        logger.info('Connected to MongoDB successfully.');
         try {
             await mongoose.connection.collection('users').dropIndex('nic_1');
-            console.log('Dropped legacy index nic_1');
+            logger.info('Dropped legacy index nic_1');
         } catch (e) {
-            console.log('');
+            logger.error('Error occurred while dropping index:', e.message);
         }
         app.listen(PORT, () => {
-            console.log(`User Authentication Service is running on port ${PORT}`);
+            logger.info(`User Authentication Service is running on port ${PORT}`);
         });
     })
     .catch((error) => {
-        console.error('MongoDB connection error:', error);
-        process.exit(1); // Exit process with failure
+        logger.error('MongoDB connection error:', error);
+        process.exit(1); 
     });
