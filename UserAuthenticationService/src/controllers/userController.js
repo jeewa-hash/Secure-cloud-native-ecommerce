@@ -83,6 +83,13 @@ export const getUserById = async (req, res) => {
 // @access  Protected
 export const updateUserProfile = async (req, res) => {
     try {
+        // Security check: Verify that authenticated user matches target ID or is admin (Fix V02: BOLA/IDOR)
+        if (req.user.id !== req.params.id && req.user.role !== 'admin') {
+            return res.status(403).json({ 
+                message: 'Access denied: You are not authorized to modify another user profile.' 
+            });
+        }
+
         const { userName, firstName, lastName, phone } = req.body;
 
         const user = await User.findById(req.params.id);
