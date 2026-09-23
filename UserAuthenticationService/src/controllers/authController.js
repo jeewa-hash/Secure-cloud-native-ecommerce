@@ -10,7 +10,7 @@ const registerSchema = Joi.object({
     password: Joi.string().min(6).required(),
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
-    role: Joi.string().valid('customer', 'shop', 'admin').default('customer'),
+    role: Joi.string().valid('customer', 'shop', 'admin', 'delivery').default('customer'),
     phone: Joi.string().optional()
 });
 
@@ -105,9 +105,17 @@ export const login = async (req, res) => {
             }
         };
 
+        const secret = process.env.JWT_SECRET;
+        if (!secret) {
+            console.error("Login Error: JWT_SECRET not configured");
+            return res.status(500).json({ message: "Server JWT secret not configured" });
+        }
+
+        console.debug("Signing JWT with secret:", secret);
+
         const token = jwt.sign(
             payload,
-            process.env.JWT_SECRET || "fallback_secret_key",
+            secret,
             { expiresIn: '1d' }
         );
 

@@ -1,0 +1,66 @@
+{
+    "family": "ShopTask",
+    "containerDefinitions": [
+        {
+            "name": "shop-container",
+            "image": "nethmiumaya56/shop-management-service",
+            "cpu": 0,
+            "portMappings": [
+                {
+                    "name": "shop-container-4040-tcp",
+                    "containerPort": 4040,
+                    "hostPort": 4040,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "AUTH_SERVICE_URL",
+                    "value": "http://auth-alb-1706945340.eu-north-1.elb.amazonaws.com"
+                },
+                {
+                    "name": "ORDER_SERVICE_URL",
+                    "value": "http://order-alb-1411336470.eu-north-1.elb.amazonaws.com"
+                },
+                {
+                    "name": "PORT",
+                    "value": "4040"
+                },
+                {
+                    "name": "JWT_SECRET",
+                    "value": "super_secret_jwt_key_here"
+                },
+                {
+                    "name": "FRONTEND_URL",
+                    "value": "http://frontend-nethmi.s3-website.eu-north-1.amazonaws.com"
+                },
+                {
+                    "name": "MONGO_URI",
+                    "value": "mongodb+srv://jkumarasekara:d57GMhwHZliDJStN@cluster0.meezaxf.mongodb.net/shopdb?retryWrites=true&w=majority"
+                }
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/ShopTask",
+                    "awslogs-create-group": "true",
+                    "awslogs-region": "eu-north-1",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            }
+        }
+    ],
+    "executionRoleArn": "arn:aws:iam::386403274306:role/ecsTaskExecutionRole",
+    "networkMode": "awsvpc",
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "256",
+    "memory": "512",
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    }
+}

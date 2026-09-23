@@ -10,9 +10,9 @@ const authUser = (req, res, next) => {
       return res.status(401).json({ success: false, message: "Not Authorized. Login Again." });
     }
 
-    const token_decode = jwt.verify(token, process.env.JWT_SECRET || 'local-dev-secret');
-    req.userId = token_decode.user.id;
-    req.userRole = token_decode.user.role;
+    const token_decode = jwt.verify(token, process.env.JWT_SECRET);
+    req.userId = token_decode.user.id; 
+    req.userRole = token_decode.user.role; 
     next();
   } catch (error) {
     console.error(error);

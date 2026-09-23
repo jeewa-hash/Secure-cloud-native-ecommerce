@@ -42,20 +42,33 @@ app.use(
 app.use('/api/products', productRoutes);
 app.use('/api/shops', shopRoutes);
 
-// Base Route
+//TO show ci cd pipe line is working
 app.get('/', (req, res) => {
-  res.send('Shop Management Service Backend is WORKING');
+  res.send('<h1>🚀 CI/CD Pipeline Test: SUCCESS!</h1><p>Hii..</p>');
 });
 
+// // Base Route
+// app.get('/', (req, res) => {
+//   res.send('Shop Management Service Backend is WORKING');
+// });
+
 const port = process.env.PORT || 4040;
-const mongoURI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/shopdb';
+const mongoURI = process.env.MONGO_URI;
+
+// Database Connection Logic
+if (!mongoURI) {
+  console.error('Mongo URI is missing! Please add it to your .env file.');
+  process.exit(1);
+}
 
 mongoose
   .connect(mongoURI)
   .then(() => {
     console.log('Shop Management Service Database connected successfully');
-    // Database එක සම්බන්ධ වූ පසු පමණක් Server එක ආරම්භ වේ [cite: 28, 53]
+    // Database එක සම්බන්ධ වූ පසු පමණක් Server එක ආරම්භ වේ
     app.listen(port, () => {
+      // CI/CD පරීක්ෂාව සඳහා එක් කළ පණිවිඩය
+      console.log('CI/CD Pipeline Test: New build deployed and running successfully!');
       console.log(`Server is running on port: ${port}`);
     });
   })

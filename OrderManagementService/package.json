@@ -4,16 +4,15 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-  "start": "node index.js",
-  "dev": "nodemon index.js"
-}
-
-,
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@notification-app/shared": "file:../Shared",
     "amqplib": "^0.10.9",
     "axios": "^1.13.6",
     "cloudinary": "^2.9.0",
@@ -22,7 +21,9 @@
     "express": "^5.2.1",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
-    "mongoose": "^9.2.3"
+    "mongoose": "^9.2.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"

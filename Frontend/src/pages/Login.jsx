@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Mail, Lock, ShoppingBag } from 'lucide-react';
 import axios from 'axios';
+import { AUTH_API } from '../apiConfig';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -20,7 +21,7 @@ const Login = () => {
         setErrorMsg('');
 
         try {
-            const response = await axios.post('http://localhost:5002/api/auth/login', {
+            const response = await axios.post(`${AUTH_API}/login`, {
                 userName: email,
                 password
             });
@@ -44,6 +45,8 @@ const Login = () => {
                         navigate('/shop-home');
                     } else if (userRole === 'admin') {
                         navigate('/admin-dashboard');
+                    }else if (userRole === 'delivery') {
+                        navigate('/delivery-landing');
                     } else {
                         navigate('/customer-home');
                     }
