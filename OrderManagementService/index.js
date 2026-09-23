@@ -4,6 +4,7 @@ import 'dotenv/config';
 import mongoose from 'mongoose';
 import orderRoutes from "./routes/orderRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
+import shopOrderRoutes from "./routes/shopOrderRoutes.js";
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use("/api/order", orderRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/order", shopOrderRoutes); 
 
 app.get('/', (req, res) => {
   res.send('Order Management Backend is WORKING✅');
