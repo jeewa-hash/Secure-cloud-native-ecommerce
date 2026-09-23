@@ -28,8 +28,8 @@ app.get("/health", (req, res) => {
   });
 
 // Database Connection & Server Start
-const PORT = process.env.PORT || 5002; // Using 5001 to avoid conflicting with other services
-const MONGO_URI = process.env.MONGO_URI;
+const PORT = process.env.PORT || 5002;
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/userdb';
 
 mongoose.connect(MONGO_URI)
     .then(async () => {

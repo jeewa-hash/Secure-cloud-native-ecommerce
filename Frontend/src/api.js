@@ -1,9 +1,10 @@
 // src/api.js
 import axios from "axios";
 
-// Set backend URL
+const localApiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:4000/api";
+
 export const API = axios.create({
-  baseURL: "http://13.49.65.6:4000/api" // <-- ECS backend URL
+  baseURL: localApiBaseUrl
 });
 
 // Example function

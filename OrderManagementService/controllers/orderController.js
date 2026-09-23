@@ -3,12 +3,12 @@ import Order from "../models/Order.js";
 import mongoose from "mongoose";
 import axios from "axios";
 
-const SHOP_SERVICE_URL = process.env.SHOP_SERVICE_URL;
+const SHOP_SERVICE_URL = (process.env.SHOP_SERVICE_URL || 'http://localhost:4040/api/products').replace(/\/$/, '');
 
 // Optional: fetch product details from Shop service
 async function fetchProduct(productId) {
   try {
-    const response = await axios.get(`${SHOP_SERVICE_URL}/products/${productId}`);
+    const response = await axios.get(`${SHOP_SERVICE_URL}/${productId}`);
     return response.data || null;
   } catch (error) {
     console.error("Product fetch failed:", error.message);

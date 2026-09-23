@@ -3,19 +3,17 @@ import cors from 'cors';
 import 'dotenv/config';
 import mongoose from 'mongoose';
 
-
 const app = express();
 
-
-
-
-
-
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
+  'http://localhost:5173',
+  'http://127.0.0.1:5173'
+];
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-
 
 app.use(
   cors({
@@ -26,26 +24,17 @@ app.use(
       } else {
         callback(new Error('The CORS policy for this site does not allow access from the specified origin.'));
       }
-    }
+    },
+    credentials: true
   })
 );
 
-
-
-
-
-
 app.get('/', (req, res) => {
-  res.send('order management backend is WORKING');
+  res.send('Notification Service backend is WORKING');
 });
 
-const port = process.env.PORT || 4040;
-const mongoURI = process.env.MONGO_URI;
-
-if (!mongoURI) {
-  console.error('Mongo URI is missing! Please add it to your .env file.');
-  process.exit(1);
-}
+const port = process.env.PORT || 4050;
+const mongoURI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/notificationdb';
 
 mongoose
   .connect(mongoURI)

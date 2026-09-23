@@ -48,13 +48,7 @@ app.get('/', (req, res) => {
 });
 
 const port = process.env.PORT || 4040;
-const mongoURI = process.env.MONGO_URI;
-
-// Database Connection Logic
-if (!mongoURI) {
-  console.error('Mongo URI is missing! Please add it to your .env file.');
-  process.exit(1);
-}
+const mongoURI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/shopdb';
 
 mongoose
   .connect(mongoURI)
