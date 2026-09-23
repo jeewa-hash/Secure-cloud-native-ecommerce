@@ -1,8 +1,18 @@
+# Use a lightweight Node.js base image
 FROM node:18-alpine
+
+# Set working directory inside container
 WORKDIR /app
-COPY Shared /shared
-COPY OrderManagementService/package*.json ./
-RUN npm install
-COPY OrderManagementService/ .
+
+# Copy package.json and install dependencies
+COPY package*.json ./
+RUN npm install --production
+
+# Copy the rest of the application code
+COPY . .
+
+# Expose the port (matches your .env PORT=4000)
 EXPOSE 4000
-CMD ["node", "index.js"]
+
+# Start the application
+CMD ["npm", "start"]

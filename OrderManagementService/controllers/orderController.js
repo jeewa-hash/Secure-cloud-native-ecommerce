@@ -3,8 +3,7 @@ import Order from "../models/Order.js";
 import mongoose from "mongoose";
 import axios from "axios";
 
-// Use your Shop Service URL
-const SHOP_SERVICE_URL = process.env.SHOP_SERVICE_URL || "http://localhost:4040/api";
+const SHOP_SERVICE_URL = process.env.SHOP_SERVICE_URL;
 
 // Optional: fetch product details from Shop service
 async function fetchProduct(productId) {
@@ -17,19 +16,17 @@ async function fetchProduct(productId) {
   }
 }
 
-// ==========================================================
 // CHECKOUT ORDER
-// ==========================================================
 export const checkoutOrder = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
     await session.startTransaction();
 
-    const { address, zipCode, phone, paymentMethod = "cod", deliveryType, instructions = "", shippingFee = 109 } = req.body;
+    const { address, phone, paymentMethod = "cod", deliveryType, instructions = "", shippingFee = 109 } = req.body;
 
     // Validate required fields
-    const requiredFields = ["address", "zipCode", "phone", "deliveryType"];
+    const requiredFields = ["address", "phone", "deliveryType"];
     const missingFields = requiredFields.filter(f => !req.body[f]);
     if (missingFields.length) {
       await session.abortTransaction();
@@ -81,7 +78,6 @@ export const checkoutOrder = async (req, res) => {
         },
         items: validatedItems,
         address,
-        zipCode,
         phone,
         paymentMethod,
         paymentStatus: "pending",
