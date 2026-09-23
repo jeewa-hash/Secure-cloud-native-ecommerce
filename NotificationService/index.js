@@ -34,7 +34,12 @@ app.get('/', (req, res) => {
 });
 
 const port = process.env.PORT || 4050;
-const mongoURI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/notificationdb';
+const mongoURI = process.env.MONGO_URI;
+
+if (!mongoURI) {
+  console.error('Mongo URI is missing! Please add it to your .env file.');
+  process.exit(1);
+}
 
 mongoose
   .connect(mongoURI)
