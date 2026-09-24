@@ -22,6 +22,7 @@ const allowedOrigins = [
     process.env.FRONTEND_URL  // Cloud deployed Frontend URL
 ];
 
+
 //Before -allow all origins 
 //app.use(cors());
 //app.use(express.json());
