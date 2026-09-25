@@ -23,10 +23,10 @@ export const checkoutOrder = async (req, res) => {
   try {
     await session.startTransaction();
 
-    const { address, phone, paymentMethod = "cod", deliveryType, instructions = "", shippingFee = 109 } = req.body;
+    const { address, zipCode, phone, paymentMethod = "cod", deliveryType, instructions = "", shippingFee = 109 } = req.body;
 
     // Validate required fields
-    const requiredFields = ["address", "phone", "deliveryType"];
+    const requiredFields = ["address", "zipCode", "phone", "deliveryType"];
     const missingFields = requiredFields.filter(f => !req.body[f]);
     if (missingFields.length) {
       await session.abortTransaction();
@@ -78,6 +78,7 @@ export const checkoutOrder = async (req, res) => {
         },
         items: validatedItems,
         address,
+        zipCode,
         phone,
         paymentMethod,
         paymentStatus: "pending",

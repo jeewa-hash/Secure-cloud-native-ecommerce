@@ -6,6 +6,7 @@ import CartSidebar from '../OrderManagementServiceFrontend/CartSidebar';
 import config from "../config";
 const PRODUCTS_API = config.PRODUCTS_API;
 const ORDER_API = config.ORDER_API;
+const CART_API = config.CART_API;
 
 const ShoppingItems = ({ shopId = null, shopName = null, onBack = null }) => {
     const [products, setProducts] = useState([]);
@@ -46,7 +47,7 @@ const ShoppingItems = ({ shopId = null, shopName = null, onBack = null }) => {
             const token = localStorage.getItem('token');
             if (!token) return;
 
-            const res = await axios.get(`${ORDER_API}/cart`, {
+            const res = await axios.get(CART_API, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
@@ -65,7 +66,7 @@ const ShoppingItems = ({ shopId = null, shopName = null, onBack = null }) => {
             }
 
             const response = await axios.post(
-                `${ORDER_API}/cart/add`,
+                `${CART_API}/add`,
                 { productId: product._id, quantity: 1 },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
