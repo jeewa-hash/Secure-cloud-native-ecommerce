@@ -1,7 +1,7 @@
 // Header.jsx — with "View all notifications" link
 
 import React, { useState, useRef, useEffect } from 'react';
-import { ShoppingCart, Bell, User, MapPin, ArrowRight } from 'lucide-react';
+import { ShoppingBag, Bell, User, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import axios from 'axios';
@@ -115,18 +115,13 @@ const Header = () => {
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=DM+Sans:wght@400;500&display=swap');
-        .ecom-header { font-family:'DM Sans',sans-serif; background:#fff; border-bottom:1px solid #f0ece8; position:sticky; top:0; z-index:100; }
-        .ecom-topbar { background:linear-gradient(90deg,#1a1a1a,#2d1a0e); padding:7px 32px; display:flex; justify-content:space-between; align-items:center; }
-        .ecom-topbar-left { color:#d1c4b8; font-size:12px; display:flex; align-items:center; gap:6px; }
-        .ecom-topbar-right { color:#d1c4b8; font-size:12px; display:flex; gap:12px; align-items:center; }
-        .ecom-topbar-right span { cursor:pointer; transition:color .2s; }
-        .ecom-topbar-right span:hover { color:#e87722; }
-        .ecom-main { padding:0 32px; height:72px; display:flex; align-items:center; gap:16px; }
-        .ecom-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
-        .ecom-logo-icon { width:38px; height:38px; background:linear-gradient(135deg,#e87722,#c95e10); border-radius:10px; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(232,119,34,.3); }
-        .ecom-logo-text { font-family:'Sora',sans-serif; font-size:20px; font-weight:700; color:#1a1a1a; }
-        .ecom-logo-text span { color:#e87722; }
-        .ecom-actions { margin-left:auto; display:flex; align-items:center; gap:8px; }
+        .ecom-header { font-family:'DM Sans',sans-serif; background:rgba(255,255,255,.9); backdrop-filter:blur(12px); border-bottom:1px solid #f3f4f6; position:sticky; top:0; z-index:100; }
+        .ecom-main { padding:0 40px; height:88px; display:flex; align-items:center; gap:16px; }
+        .ecom-logo { display:flex; align-items:center; gap:8px; text-decoration:none; }
+        .ecom-logo-icon { width:40px; height:40px; background:#ea580c; border-radius:8px; display:flex; align-items:center; justify-content:center; }
+        .ecom-logo-text { font-size:24px; font-weight:700; letter-spacing:-.8px; color:#000; }
+        .ecom-logo-text span { color:#000; }
+        .ecom-actions { margin-left:auto; display:flex; align-items:center; gap:16px; }
         .ecom-icon-btn { width:42px; height:42px; border-radius:12px; border:none; background:transparent; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#5a4535; position:relative; transition:all .2s; }
         .ecom-icon-btn:hover { background:#fff4ec; color:#e87722; }
         .ecom-badge { position:absolute; top:5px; right:5px; min-width:18px; height:18px; background:#e87722; color:#fff; font-size:10px; font-weight:700; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #fff; padding:0 3px; font-family:'Sora',sans-serif; }
@@ -149,26 +144,16 @@ const Header = () => {
         .notif-footer { padding:12px 18px; border-top:1px solid #f5f0ea; background:#fdfaf8; }
         .notif-view-all { display:flex; align-items:center; justify-content:center; gap:6px; width:100%; padding:9px; border-radius:10px; border:1.5px solid #e8e0d8; background:white; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600; color:#4a3728; cursor:pointer; transition:all .2s; }
         .notif-view-all:hover { border-color:#e87722; color:#e87722; background:#fff4ec; }
-        .ecom-user-pill { display:flex; align-items:center; gap:8px; padding:6px 14px; border-radius:40px; border:1.5px solid #e8e0d8; background:#faf8f6; cursor:pointer; transition:border-color .2s; }
-        .ecom-user-pill:hover { border-color:#e87722; }
+        .ecom-user-pill { display:flex; align-items:center; gap:8px; padding:6px 0; border:none; background:transparent; cursor:pointer; }
+        .ecom-user-pill:hover { color:#ea580c; }
         .ecom-role-badge { font-size:9px; font-weight:700; background:#fff4ec; color:#e87722; padding:2px 6px; border-radius:10px; text-transform:uppercase; letter-spacing:.4px; }
       `}</style>
 
       <header className="ecom-header">
-        <div className="ecom-topbar">
-          <div className="ecom-topbar-left">
-            <MapPin size={12} />
-            Deliver to: <strong style={{ color: '#e8c9a8', marginLeft: 4 }}>Colombo, LK</strong>
-          </div>
-          <div className="ecom-topbar-right">
-            <span>Track Order</span><span>|</span><span>Help</span>
-          </div>
-        </div>
-
         <div className="ecom-main">
           <a className="ecom-logo" href="/">
-            <div className="ecom-logo-icon"><ShoppingCart size={18} color="white" /></div>
-            <span className="ecom-logo-text">E<span>Com</span></span>
+            <div className="ecom-logo-icon"><ShoppingBag size={20} color="white" /></div>
+            <span className="ecom-logo-text">E Com</span>
           </a>
 
           <div className="ecom-actions" ref={dropdownRef}>

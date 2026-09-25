@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -18,8 +18,18 @@ import './App.css';
 function App() {
   return (
     <Router>
+      <AppContent />
+    </Router>
+  );
+}
+
+function AppContent() {
+  const { pathname } = useLocation();
+
+  return (
+    <>
       <Toaster position="top-right" reverseOrder={false} />
-      <Header />
+      {pathname !== '/' && <Header />}
       <Routes>
         {/* Public Routes (Accessible only if NOT logged in) */}
         <Route element={<PublicRoute />}>
@@ -52,7 +62,7 @@ function App() {
           <Route path="/notifications" element={<NotificationPage />} />
         </Route>
       </Routes>
-    </Router>
+    </>
   );
 }
 
