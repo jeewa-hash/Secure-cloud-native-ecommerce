@@ -27,8 +27,10 @@ async function test() {
             role: admin.role
         }
     };
-
-    const token = jwt.sign(payload, "fallback_secret_key", { expiresIn: '1d' });
+    if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET environment variable is required');
+}
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' });
     console.log("Token generated locally.");
 
     const productPayload = {

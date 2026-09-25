@@ -33,7 +33,7 @@ app.get('/', (req, res) => {
   res.send('Notification Service backend is WORKING');
 });
 
-const port = process.env.PORT || 4050;
+const port = process.env.PORT ;
 const mongoURI = process.env.MONGO_URI;
 
 if (!mongoURI) {
