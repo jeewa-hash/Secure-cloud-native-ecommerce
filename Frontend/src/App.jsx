@@ -10,6 +10,8 @@ import PublicRoute from './components/PublicRoute';
 import CheckoutPage from './OrderManagementServiceFrontend/CheckoutPage';
 import OrderHistoryPage from "./OrderManagementServiceFrontend/OrderHistoryPage"; 
 
+import OAuthCallback from './pages/OAuthCallback';
+
 import './App.css';
 
 function App() {
@@ -21,6 +23,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/oauth/callback" element={<OAuthCallback />} />
         </Route>
 
         {/* Protected Routes (Accessible only if logged in and role matches) */}
