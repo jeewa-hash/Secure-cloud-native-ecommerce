@@ -1,0 +1,67 @@
+name: DevSecOps CI Pipeline - Dependency Security Scanning
+
+on:
+  push:
+    branches: [ main, member4-nethmi ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch: # Allows manual trigger from GitHub Actions UI
+
+jobs:
+  dependency-security-scan:
+    name: Microservices Dependency Audit (SCA)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Check out repository code
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # 1. UserAuthenticationService Audit
+      - name: 🔍 Scan UserAuthenticationService Dependencies
+        run: |
+          echo "=========================================="
+          echo "🔍 Scanning UserAuthenticationService..."
+          echo "=========================================="
+          cd UserAuthenticationService
+          npm audit --audit-level=high
+
+      # 2. ShopManagementService Audit
+      - name: 🔍 Scan ShopManagementService Dependencies
+        run: |
+          echo "=========================================="
+          echo "🔍 Scanning ShopManagementService..."
+          echo "=========================================="
+          cd ShopManagementService
+          npm audit --audit-level=high
+
+      # 3. OrderManagementService Audit
+      - name: 🔍 Scan OrderManagementService Dependencies
+        run: |
+          echo "=========================================="
+          echo "🔍 Scanning OrderManagementService..."
+          echo "=========================================="
+          cd OrderManagementService
+          npm audit --audit-level=high
+
+      # 4. NotificationService Audit
+      - name: 🔍 Scan NotificationService Dependencies
+        run: |
+          echo "=========================================="
+          echo "🔍 Scanning NotificationService..."
+          echo "=========================================="
+          cd NotificationService
+          npm audit --audit-level=high
+
+      # 5. Frontend Audit
+      - name: 🔍 Scan Frontend Dependencies
+        run: |
+          echo "=========================================="
+          echo "🔍 Scanning Frontend..."
+          echo "=========================================="
+          cd Frontend
+          npm audit --audit-level=high
