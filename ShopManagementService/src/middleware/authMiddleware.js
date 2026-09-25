@@ -37,7 +37,10 @@ export const protect = (req, res, next) => {
   if (token && token.startsWith("Bearer")) {
     try {
       token = token.split(" ")[1];
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || "fallback_secret_key");
+      if (!process.env.JWT_SECRET) {
+          throw new Error('JWT_SECRET environment variable is required');
+      }
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
       req.user = decoded.user; // { id, role, ... } from Auth Service
       next();
     } catch (error) {

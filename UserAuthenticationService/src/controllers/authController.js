@@ -104,10 +104,13 @@ export const login = async (req, res) => {
                 role: user.role
             }
         };
+        if (!process.env.JWT_SECRET) {
+          throw new Error('JWT_SECRET environment variable is required');
+        }
 
         const token = jwt.sign(
             payload,
-            process.env.JWT_SECRET || "fallback_secret_key",
+            process.env.JWT_SECRET,
             { expiresIn: '1d' }
         );
 
