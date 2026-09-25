@@ -2,14 +2,13 @@ import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
 import mongoose from 'mongoose';
+import notificationRoutes from './routes/notificationRoutes.js';
 
 const app = express();
 
 const allowedOrigins = [
   'http://localhost:3000',
-  'http://127.0.0.1:3000',
   'http://localhost:5173',
-  'http://127.0.0.1:5173'
 ];
 
 app.use(express.json());
@@ -29,11 +28,14 @@ app.use(
   })
 );
 
+// Secure Notification API Routes (Fix V07: IDOR)
+app.use('/api/notifications', notificationRoutes);
+
 app.get('/', (req, res) => {
-  res.send('Notification Service backend is WORKING');
+  res.send('Notification Service is WORKING');
 });
 
-const port = process.env.PORT ;
+const port = process.env.PORT || 4050;
 const mongoURI = process.env.MONGO_URI;
 
 if (!mongoURI) {

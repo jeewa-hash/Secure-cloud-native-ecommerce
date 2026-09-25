@@ -13,6 +13,9 @@ import OrderHistoryPage from "./OrderManagementServiceFrontend/OrderHistoryPage"
 import Header from './shared/header';
 import { Toaster } from 'react-hot-toast';
 import NotificationPage from './NotificationService/NotificationList';
+
+import OAuthCallback from './pages/OAuthCallback';
+
 import './App.css';
 
 function App() {
@@ -36,6 +39,7 @@ function AppContent() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/oauth/callback" element={<OAuthCallback />} />
         </Route>
 
         {/* Protected Routes (Accessible only if logged in and role matches) */}

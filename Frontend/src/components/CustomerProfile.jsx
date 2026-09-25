@@ -79,12 +79,17 @@ const CustomerProfile = () => {
             setMessage('');
 
             const userId = getUserIdFromToken();
+            const token = localStorage.getItem('token');
 
             await axios.put(`${USER_API}/${userId}`, {
                 userName: profile.username,
                 firstName: profile.firstName,
                 lastName: profile.lastName,
                 phone: profile.phone
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             });
 
             setMessage('Profile updated successfully');
