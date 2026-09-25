@@ -17,6 +17,7 @@ import DeliveryOverview from "../Delivery/DeliveryOverview";
 import DeliveryShipmentsList from "../Delivery/DeliveryShipmentsList";
 import DeliveryProfilePanel from "../Delivery/DeliveryProfilePanel";
 import AvailabilityPanel from "../Delivery/AvailabilityPanel";
+import Header from "../shared/header";
 
 const DeliveryDashboard = ({ profile, onProfileRefresh }) => {
   const navigate = useNavigate();
@@ -176,15 +177,16 @@ const DeliveryDashboard = ({ profile, onProfileRefresh }) => {
           </div>
         </aside>
 
-        <main className="flex-1 min-w-0 flex flex-col">
-          <div className="lg:hidden sticky top-0 z-20 bg-white border-b border-gray-200 px-4 py-3">
-            <button
-              onClick={() => setIsSidebarOpen(true)}
-              className="p-2 text-gray-600 hover:bg-gray-100 rounded-xl"
-            >
-              <Menu className="w-6 h-6" />
-            </button>
-          </div>
+        <main className="flex-1 min-w-0 flex flex-col h-screen overflow-hidden">
+          <Header showLogo={false} />
+
+          <button
+            onClick={() => setIsSidebarOpen(true)}
+            className="fixed left-4 top-4 z-[110] p-2 text-gray-600 hover:bg-gray-100 rounded-xl lg:hidden"
+            aria-label="Open navigation menu"
+          >
+            <Menu className="w-6 h-6" />
+          </button>
 
           <div className="flex-1 overflow-y-auto">
             <div className="p-6 md:p-8 lg:p-10 max-w-7xl mx-auto w-full">

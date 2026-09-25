@@ -26,7 +26,7 @@ const getUserFromToken = () => {
   }
 };
 
-const Header = () => {
+const Header = ({ showLogo = true }) => {
   const [currentUser]   = useState(() => getUserFromToken()); // ✅ lazy init — survives refresh
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount]     = useState(0);
@@ -118,9 +118,9 @@ const Header = () => {
         .ecom-header { font-family:'DM Sans',sans-serif; background:rgba(255,255,255,.9); backdrop-filter:blur(12px); border-bottom:1px solid #f3f4f6; position:sticky; top:0; z-index:100; }
         .ecom-main { padding:0 40px; height:88px; display:flex; align-items:center; gap:16px; }
         .ecom-logo { display:flex; align-items:center; gap:8px; text-decoration:none; }
-        .ecom-logo-icon { width:40px; height:40px; background:#ea580c; border-radius:8px; display:flex; align-items:center; justify-content:center; }
-        .ecom-logo-text { font-size:24px; font-weight:700; letter-spacing:-.8px; color:#000; }
-        .ecom-logo-text span { color:#000; }
+        .ecom-logo-icon { width:40px; height:40px; background:#ea580c; border-radius:12px; display:flex; align-items:center; justify-content:center; }
+        .ecom-logo-text { font-size:20px; font-weight:700; letter-spacing:normal; color:#111827; }
+        .ecom-logo-text span { color:#111827; }
         .ecom-actions { margin-left:auto; display:flex; align-items:center; gap:16px; }
         .ecom-icon-btn { width:42px; height:42px; border-radius:12px; border:none; background:transparent; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#5a4535; position:relative; transition:all .2s; }
         .ecom-icon-btn:hover { background:#fff4ec; color:#e87722; }
@@ -151,10 +151,12 @@ const Header = () => {
 
       <header className="ecom-header">
         <div className="ecom-main">
-          <a className="ecom-logo" href="/">
-            <div className="ecom-logo-icon"><ShoppingBag size={20} color="white" /></div>
-            <span className="ecom-logo-text">E Com</span>
-          </a>
+          {showLogo && (
+            <a className="ecom-logo" href="/">
+              <div className="ecom-logo-icon"><ShoppingBag size={24} color="white" /></div>
+              <span className="ecom-logo-text">E Com</span>
+            </a>
+          )}
 
           <div className="ecom-actions" ref={dropdownRef}>
             <div style={{ position: 'relative' }}>

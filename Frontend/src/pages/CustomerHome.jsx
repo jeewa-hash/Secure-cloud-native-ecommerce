@@ -5,6 +5,7 @@ import ShoppingItems from '../components/ShoppingItems';
 import ShopList from '../components/ShopList';
 import CustomerProfile from '../components/CustomerProfile';
 import OrderHistoryPage from '../OrderManagementServiceFrontend/OrderHistoryPage';
+import Header from '../shared/header';
 
 const CustomerHome = () => {
     const navigate = useNavigate();
@@ -122,22 +123,15 @@ const CustomerHome = () => {
 
             {/* Main Content Area */}
             <main className="flex-1 min-w-0 flex flex-col h-screen overflow-hidden">
-                {/* Header for mobile */}
-                <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-10 w-full shrink-0">
-                    <div className="flex items-center gap-2">
-                        {/* Mobile menu toggle */}
-                        <button
-                            onClick={() => setIsSidebarOpen(true)}
-                            className="p-2 -ml-2 text-gray-600 hover:bg-gray-100 rounded-lg lg:hidden"
-                        >
-                            <Menu className="w-6 h-6" />
-                        </button>
-                        <div className="lg:hidden flex items-center gap-2">
-                            <ShoppingBag className="w-6 h-6 text-orange-600" />
-                            <span className="text-lg font-bold text-gray-900">E Com</span>
-                        </div>
-                    </div>
-                </header>
+                <Header showLogo={false} />
+
+                <button
+                    onClick={() => setIsSidebarOpen(true)}
+                    className="fixed left-4 top-4 z-[110] p-2 text-gray-600 hover:bg-gray-100 rounded-lg lg:hidden"
+                    aria-label="Open navigation menu"
+                >
+                    <Menu className="w-6 h-6" />
+                </button>
 
                 {/* Content */}
                 <div className="p-6 md:p-8 lg:p-12 w-full max-w-7xl mx-auto flex-1 overflow-y-auto">

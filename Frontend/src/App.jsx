@@ -29,7 +29,7 @@ function AppContent() {
   return (
     <>
       <Toaster position="top-right" reverseOrder={false} />
-      {pathname !== '/' && <Header />}
+      {pathname !== '/' && pathname !== '/customer-home' && pathname !== '/shop-home' && pathname !== '/delivery-landing' && <Header />}
       <Routes>
         {/* Public Routes (Accessible only if NOT logged in) */}
         <Route element={<PublicRoute />}>

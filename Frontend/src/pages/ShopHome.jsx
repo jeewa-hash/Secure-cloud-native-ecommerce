@@ -5,6 +5,7 @@ import AddProduct from '../components/AddProduct';
 import ProductCatalog from '../components/ProductCatalog';
 import CustomerProfile from '../components/CustomerProfile';
 import ShopOrders from '../components/ShopOrders';
+import Header from '../shared/header';
 
 const ShopHome = () => {
     const navigate = useNavigate();
@@ -129,23 +130,19 @@ const ShopHome = () => {
             </aside>
 
             {/* Main Content Area */}
-            <main className="flex-1 min-w-0 overflow-x-hidden">
-                {/* Header for mobile */}
-                <header className="lg:hidden bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
-                    <div className="flex items-center gap-2">
-                        <Store className="w-6 h-6 text-orange-600" />
-                        <span className="text-lg font-bold">Shop Admin</span>
-                    </div>
-                    <button
-                        onClick={() => setIsSidebarOpen(true)}
-                        className="p-2 -mr-2 text-gray-600 hover:bg-gray-100 rounded-lg"
-                    >
-                        <Menu className="w-6 h-6" />
-                    </button>
-                </header>
+            <main className="flex-1 min-w-0 flex flex-col h-screen overflow-hidden">
+                <Header showLogo={false} />
+
+                <button
+                    onClick={() => setIsSidebarOpen(true)}
+                    className="fixed left-4 top-4 z-[110] p-2 text-gray-600 hover:bg-gray-100 rounded-lg lg:hidden"
+                    aria-label="Open navigation menu"
+                >
+                    <Menu className="w-6 h-6" />
+                </button>
 
                 {/* Content */}
-                <div className="p-6 md:p-8 lg:p-12 max-w-7xl mx-auto">
+                <div className="p-6 md:p-8 lg:p-12 max-w-7xl mx-auto w-full flex-1 overflow-y-auto">
                     {renderContent()}
                 </div>
             </main>
