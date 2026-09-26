@@ -133,3 +133,95 @@ export const login = async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 };
+
+export const createInitialAdmin = async () => {
+    try {
+        const adminUsername = process.env.INITIAL_ADMIN_USERNAME;
+        const adminEmail = process.env.INITIAL_ADMIN_EMAIL;
+        const adminPassword = process.env.INITIAL_ADMIN_PASSWORD;
+
+        if (!adminUsername || !adminEmail || !adminPassword) {
+            console.log("Initial admin credentials are not configured.");
+            return;
+        }
+
+        const existingAdmin = await User.findOne({
+            $or: [
+                { userName: adminUsername },
+                { email: adminEmail }
+            ]
+        });
+
+        if (existingAdmin) {
+            console.log("Initial admin already exists.");
+            return;
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(adminPassword, salt);
+
+        const admin = new User({
+            userName: adminUsername,
+            email: adminEmail,
+            password: hashedPassword,
+            firstName: "System",
+            lastName: "Administrator",
+            role: "admin",
+            roles: ["admin"]
+        });
+
+        await admin.save();
+
+        console.log("Initial admin account created.");
+    } catch (error) {
+        console.error("Initial admin creation failed:", error);
+    }
+};
+
+export const createAdmin = async (req, res) => {
+    try {
+        const { userName, email, password, firstName, lastName, phone } = req.body;
+
+        const existingUser = await User.findOne({
+            $or: [{ email }, { userName }]
+        });
+
+        if (existingUser) {
+            return res.status(409).json({
+                message: "User with given email or username already exists!"
+            });
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        const newAdmin = new User({
+            userName,
+            email,
+            password: hashedPassword,
+            firstName,
+            lastName,
+            role: "admin",
+            roles: ["admin"],
+            phone
+        });
+
+        await newAdmin.save();
+
+        res.status(201).json({
+            message: "Admin created successfully",
+            user: {
+                id: newAdmin._id,
+                userName: newAdmin.userName,
+                email: newAdmin.email,
+                role: newAdmin.role
+            }
+        });
+
+    } catch (error) {
+        console.error("Create Admin Error:", error);
+        res.status(500).json({
+            message: "Internal server error"
+        });
+    }
+};

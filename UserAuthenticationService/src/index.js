@@ -4,6 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import { createInitialAdmin } from './controllers/authController.js';
 
 // Load environment variables
 dotenv.config();
@@ -40,6 +41,7 @@ mongoose.connect(MONGO_URI)
         } catch (e) {
             console.log('');
         }
+        await createInitialAdmin();
         app.listen(PORT, () => {
             console.log(`User Authentication Service is running on port ${PORT}`);
         });
