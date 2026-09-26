@@ -95,7 +95,12 @@ export const updateShopOrderStatus = async (req, res) => {
     const { orderId } = req.params;
     const { status } = req.body;
 
-    const order = await Order.findById(orderId);
+    // Security fix (V05): checking only the shop role is insufficient because
+    // another shop's order ID could be supplied. Scope lookup to this shop's ID.
+    const order = await Order.findOne({
+      _id: orderId,
+      "shop._id": req.shopId,
+    });
 
     if (!order) {
       return res.status(404).json({
