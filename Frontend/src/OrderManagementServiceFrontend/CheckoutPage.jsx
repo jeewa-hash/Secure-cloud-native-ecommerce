@@ -153,8 +153,8 @@ const CheckoutPage = () => {
           zipCode: zipCode.trim(),
           phone: phone,
           deliveryType,
-          instructions: instructions.trim() || "",
-          shippingFee: deliveryFee
+          // V04 fix: send the user's delivery choice only; the API calculates fees and prices.
+          instructions: instructions.trim() || ""
         },
         { 
           headers: { 

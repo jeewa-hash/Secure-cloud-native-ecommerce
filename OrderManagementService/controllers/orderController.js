@@ -4,11 +4,17 @@ import mongoose from "mongoose";
 import axios from "axios";
 
 const SHOP_SERVICE_URL = process.env.SHOP_SERVICE_URL;
+const SHIPPING_FEES = Object.freeze({
+  standard: 109,
+  express: 250,
+});
 
-// Optional: fetch product details from Shop service
+// Read current product data from the trusted Shop service. Checkout must not
+// fall back to client-influenced cart prices when this service is unavailable.
 async function fetchProduct(productId) {
   try {
-    const response = await axios.get(`${SHOP_SERVICE_URL}/products/${productId}`);
+    // SHOP_SERVICE_URL already includes /api/products; append only the product ID.
+    const response = await axios.get(`${SHOP_SERVICE_URL}/${productId}`);
     return response.data || null;
   } catch (error) {
     console.error("Product fetch failed:", error.message);
@@ -23,7 +29,25 @@ export const checkoutOrder = async (req, res) => {
   try {
     await session.startTransaction();
 
-    const { address, zipCode, phone, paymentMethod = "cod", deliveryType, instructions = "", shippingFee = 109 } = req.body;
+    const { address, zipCode, phone, paymentMethod = "cod", deliveryType, instructions = "" } = req.body;
+
+    // Security fix (V04): reject client-supplied financial values. The client may
+    // choose a delivery type, but the fee and all order totals are server-calculated.
+    const clientFinancialFields = ["price", "prices", "subtotal", "shippingFee", "deliveryFee", "total"];
+    if (clientFinancialFields.some((field) => Object.hasOwn(req.body, field))) {
+      await session.abortTransaction();
+      return res.status(400).json({
+        success: false,
+        message: "Prices and shipping fees are calculated by the server.",
+      });
+    }
+
+    if (!Object.prototype.hasOwnProperty.call(SHIPPING_FEES, deliveryType)) {
+      await session.abortTransaction();
+      return res.status(400).json({ success: false, message: "Invalid delivery type." });
+    }
+
+    const shippingFee = SHIPPING_FEES[deliveryType];
 
     // Validate required fields
     const requiredFields = ["address", "zipCode", "phone", "deliveryType"];
@@ -56,12 +80,41 @@ export const checkoutOrder = async (req, res) => {
 
       for (const item of items) {
         const productData = await fetchProduct(item.product);
-        const price = productData?.price || item.price; 
+        if (!productData) {
+          await session.abortTransaction();
+          return res.status(503).json({
+            success: false,
+            message: "Product pricing is temporarily unavailable. Please try again.",
+          });
+        }
+
+        // Security fix (V04): never use the cart's stored price as a fallback;
+        // stale or tampered cart data must not determine the charged amount.
+        const price = productData.price;
+        if (typeof price !== "number" || !Number.isFinite(price) || price < 0) {
+          await session.abortTransaction();
+          return res.status(503).json({
+            success: false,
+            message: "Trusted product pricing is invalid. Please try again later.",
+          });
+        }
+        if (productData.isAvailable === false) {
+          await session.abortTransaction();
+          return res.status(409).json({
+            success: false,
+            message: "A product in your cart is no longer available.",
+          });
+        }
+        if (!Number.isSafeInteger(item.quantity) || item.quantity < 1 || item.quantity > 100) {
+          await session.abortTransaction();
+          return res.status(400).json({ success: false, message: "Cart contains an invalid quantity." });
+        }
+
         validatedItems.push({
           product: item.product,
-          name: item.name,
+          name: productData.name,
           price,
-          image: item.image,
+          image: productData.image,
           quantity: item.quantity,
         });
         subtotal += price * item.quantity;
