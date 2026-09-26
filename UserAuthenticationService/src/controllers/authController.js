@@ -10,7 +10,7 @@ const registerSchema = Joi.object({
     password: Joi.string().min(6).required(),
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
-    role: Joi.string().valid('customer', 'shop', 'admin').default('customer'),
+    role: Joi.string().valid('customer', 'shop').default('customer'),
     phone: Joi.string().optional()
 });
 
