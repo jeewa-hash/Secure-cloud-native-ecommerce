@@ -12,6 +12,14 @@ export const createNotification = async (data) => {
 export const getUserNotifications = async (req, res) => {
   try {
     const { recipientId } = req.params;
+
+    // Security Check: Verify authenticated user matches requested recipientId or is admin (Fix V07: IDOR)
+    if (req.user.id !== recipientId && req.user.role !== "admin") {
+      return res.status(403).json({
+        message: "Access denied: You are not authorized to access another recipient's notifications."
+      });
+    }
+
     const notifications = await Notification.find({ recipientId });
     res.json(notifications);
   } catch (error) {
