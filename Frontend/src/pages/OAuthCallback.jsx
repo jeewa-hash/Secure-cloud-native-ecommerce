@@ -34,15 +34,13 @@ const OAuthCallback = () => {
                 const decoded = JSON.parse(jsonPayload);
                 const userRole = decoded.user?.role;
 
-                setTimeout(() => {
-                    if (userRole === 'shop') {
-                        navigate('/shop-home');
-                    } else if (userRole === 'admin') {
-                        navigate('/admin-dashboard');
-                    } else {
-                        navigate('/customer-home');
-                    }
-                }, 1500);
+                if (userRole === 'shop') {
+                    navigate('/shop-home', { replace: true });
+                } else if (userRole === 'admin') {
+                    navigate('/admin-dashboard', { replace: true });
+                } else {
+                    navigate('/customer-home', { replace: true });
+                }
             } catch (err) {
                 console.error('Failed to parse OAuth token:', err);
                 setError('Invalid token received from OAuth provider.');

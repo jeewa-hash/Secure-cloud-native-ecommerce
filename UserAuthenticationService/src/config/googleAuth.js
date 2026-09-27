@@ -1,5 +1,8 @@
 import { google } from 'googleapis';
 import dotenv from 'dotenv';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import User from '../models/User.js';
 
 dotenv.config();
 
@@ -37,10 +40,43 @@ export const googleAuthCallback = async (req, res) => {
         const oauth2 = google.oauth2({ version: 'v2', auth: googleOAuth2Client });
         const { data: profile } = await oauth2.userinfo.get();
 
-        // The profile can now be matched to or created as a local user.
-        res.status(200).json({ message: 'Google authentication successful', profile });
+        if (!profile.email) {
+            return res.status(401).json({ message: 'Google account email was not provided' });
+        }
+
+        let user = await User.findOne({ email: profile.email });
+        if (!user) {
+            const userName = `google_${profile.id}`;
+            const randomPassword = await bcrypt.hash(`${profile.id}_${Date.now()}`, 10);
+            const [firstName = 'Google', ...lastNameParts] = (profile.name || 'User').split(' ');
+
+            user = await User.create({
+                userName,
+                email: profile.email,
+                password: randomPassword,
+                firstName,
+                lastName: lastNameParts.join(' ') || 'User',
+                role: 'customer',
+                roles: ['customer'],
+                isEmailVerified: true
+            });
+        }
+
+        if (!process.env.JWT_SECRET) {
+            return res.status(500).json({ message: 'JWT authentication is not configured' });
+        }
+
+        const token = jwt.sign(
+            { user: { id: user._id, role: user.role } },
+            process.env.JWT_SECRET,
+            { expiresIn: '1d' }
+        );
+
+        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+        res.redirect(`${frontendUrl}/oauth/callback?token=${encodeURIComponent(token)}`);
     } catch (error) {
         console.error('Google authentication error:', error);
-        res.status(401).json({ message: 'Google authentication failed' });
+        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+        res.redirect(`${frontendUrl}/oauth/callback?error=${encodeURIComponent('Google authentication failed')}`);
     }
 };
