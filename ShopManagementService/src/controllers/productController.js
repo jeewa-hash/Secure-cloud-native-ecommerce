@@ -84,7 +84,14 @@ export const updateProduct = async (req, res) => {
 
     // භාණ්ඩය අයිති shop එකටම පමණක් update කිරීමට ඉඩ දීම (Security principle [cite: 38])
     if (product && product.shopId.toString() === req.user.id) {
-      Object.assign(product, req.body);
+      // Fix Mass Assignment (V06): Whitelist allowed fields only (DTO Pattern)
+      const allowedUpdates = ["name", "price", "description", "image", "category", "isAvailable"];
+      allowedUpdates.forEach((field) => {
+        if (req.body[field] !== undefined) {
+          product[field] = req.body[field];
+        }
+      });
+
       await product.save();
       res.json(product);
     } else {
